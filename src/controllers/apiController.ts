@@ -19,7 +19,7 @@ export const register = async (req: Request, res: Response) => {
             res.json({ error: 'E-mail já existe.' });
         }
     }
-
+    
     res.json({ error: 'E-mail e/ou senha não enviados.' });
 }
 
