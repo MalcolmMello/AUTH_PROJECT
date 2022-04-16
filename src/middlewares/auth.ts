@@ -1,23 +1,27 @@
 import { Request, Response, NextFunction} from 'express'
+import JWT from 'jsonwebtoken'
+import dotenv from 'dotenv'
 import { User } from '../models/User'
+
+dotenv.config();
 
 export const Auth = {
     private: async (req: Request, res: Response, next: NextFunction) => {
         let sucess = false;
         
         if(req.headers.authorization) {
-            let hash = req.headers.authorization.substring(6);
             
-            let decoded = Buffer.from(hash, 'base64').toString();
+            const [authType, token] = req.headers.authorization.split(' ');
+            
+            if(authType === 'Bearer') {
+                const decoded = JWT.verify(
+                    token,
+                    process.env.JWT_SECRET_KEY as string
+                );
 
-            let [email, password] = decoded.split(':')
-
-            if(email && password) {
-                let hasUser = await User.findOne({ where: { email, password } });
-                if(hasUser) {
-                    sucess = true;
-                }
+                console.log("DECODED", decoded)
             }
+            
         }
 
         if(sucess) {
