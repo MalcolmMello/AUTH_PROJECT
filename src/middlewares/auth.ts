@@ -14,12 +14,17 @@ export const Auth = {
             const [authType, token] = req.headers.authorization.split(' ');
             
             if(authType === 'Bearer') {
-                const decoded = JWT.verify(
-                    token,
-                    process.env.JWT_SECRET_KEY as string
-                );
-
-                console.log("DECODED", decoded)
+                try {
+                    JWT.verify(
+                        token,
+                        process.env.JWT_SECRET_KEY as string
+                    );
+                    
+                    sucess = true;
+                } catch (err) {
+                    
+                }
+                
             }
             
         }
